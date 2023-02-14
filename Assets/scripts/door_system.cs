@@ -5,14 +5,34 @@ using UnityEngine;
 public class door_system : MonoBehaviour
 {
     public bool Isopen = false;
-    void Start()
+    public float smooth = 2.0f;
+
+    private Quaternion targetRotaion;
+
+    private void Start()
     {
-        
+        targetRotaion= transform.rotation;
+    }
+
+    public void ToggleDoor(bool b)
+    {
+        Isopen = !Isopen;
+
+        if (Isopen)
+        {
+            targetRotaion = Quaternion.Euler(0, (b ? -90 : 90), 0);
+        }
+        else
+        {
+            targetRotaion = Quaternion.Euler(Vector3.zero);
+        }
     }
 
   
     void Update()
     {
-        transform.rotation = Isopen ? Quaternion.Euler(0,90,0) : Quaternion.Euler(Vector3.zero);
+        transform.rotation = Quaternion.Lerp(transform.rotation , targetRotaion , smooth * Time.deltaTime);
+  
     }
+
 }
